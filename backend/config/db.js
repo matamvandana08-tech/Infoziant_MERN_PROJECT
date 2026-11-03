@@ -22,10 +22,9 @@ const getMongoUri = () => {
   }
 
   if (
-    !['mongodb:', 'mongodb+srv:'].includes(parsedUri.protocol) ||
-    !parsedUri.hostname.toLowerCase().endsWith('.mongodb.net')
+    !['mongodb:', 'mongodb+srv:'].includes(parsedUri.protocol)
   ) {
-    throw new Error('MONGODB_URI must point to a MongoDB Atlas cluster (*.mongodb.net).');
+    throw new Error('MONGODB_URI must be a valid MongoDB connection string.');
   }
 
   return uri;
@@ -37,9 +36,9 @@ const connectDB = async () => {
     await mongoose.connect(uri, {
       dbName: process.env.MONGODB_DB?.trim() || 'docconnect'
     });
-    console.log(`MongoDB Atlas connected successfully (${mongoose.connection.host})`);
+    console.log(`MongoDB connected successfully (${mongoose.connection.host})`);
   } catch (error) {
-    console.error('MongoDB Atlas connection error:', error.message.replace(uri, '[redacted MongoDB URI]'));
+    console.error('MongoDB connection error:', error.message.replace(uri, '[redacted MongoDB URI]'));
     throw error;
   }
 };
